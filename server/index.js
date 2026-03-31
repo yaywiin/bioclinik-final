@@ -16,36 +16,46 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const app = express()
 const PORT = process.env.PORT || 3000
 
-// ── Middleware ──────────────────────────────────────────────────────────────
+// ── Middleware ─────────────────────────────────────────
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:4173'],
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:4173',
+    'https://bioclinik-final.vercel.app'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }))
 
 app.use(express.json())
 
-// ── Archivos estáticos (imágenes subidas) ───────────────────────────────────
+// ── Archivos estáticos ─────────────────────────────────
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
-// ── Rutas API ───────────────────────────────────────────────────────────────
+// ── Ruta raíz (SOLUCIÓN) ───────────────────────────────
+app.get('/', (req, res) => {
+  res.send('API Bioclinik funcionando 🚀')
+})
+
+// ── Rutas API ──────────────────────────────────────────
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
-app.use('/api/auth',       authRouter)
-app.use('/api/usuarios',   usuariosRouter)
-app.use('/api/productos',  productosRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/usuarios', usuariosRouter)
+app.use('/api/productos', productosRouter)
 app.use('/api/categorias', categoriasRouter)
-app.use('/api/pedidos',    pedidosRouter)
-app.use('/api/citas',      citasRouter)
+app.use('/api/pedidos', pedidosRouter)
+app.use('/api/citas', citasRouter)
 
-// ── 404 catch ───────────────────────────────────────────────────────────────
+// ── 404 ────────────────────────────────────────────────
 app.use((req, res) => {
   res.status(404).json({ error: `Ruta ${req.method} ${req.url} no encontrada` })
 })
 
-// ── Arrancar servidor ────────────────────────────────────────────────────────
+// ── Servidor ───────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`🚀 Servidor Bioclinik escuchando en http://localhost:${PORT}`)
 })
