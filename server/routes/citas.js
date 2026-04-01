@@ -4,13 +4,15 @@ import {
   getCitas,
   createCita,
   updateCita,
-  deleteCita
+  deleteCita,
+  getHorariosOcupados
 } from '../controllers/citasController.js'
 
 const router = express.Router()
 
-// Ruta pública para que los clientes agenden citas
+// Rutas públicas (sin auth)
 router.post('/', createCita)
+router.get('/horarios-ocupados', getHorariosOcupados)
 
 // Rutas protegidas (Admin)
 router.get('/', verificarToken, getCitas)

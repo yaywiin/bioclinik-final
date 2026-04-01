@@ -208,16 +208,22 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
   align-items: center;
   justify-content: center;
   box-shadow: 0 8px 25px rgba(25, 98, 200, 0.45);
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease, box-shadow 0.3s ease;
+  transform-origin: center;
 }
 
 .chat-fab:hover {
-  transform: scale(1.1);
+  transform: scale(1.1) translateY(-4px);
   box-shadow: 0 12px 35px rgba(25, 98, 200, 0.55);
 }
 
 .chat-fab--open {
   background: linear-gradient(135deg, #041B47, #1962C8);
+  transform: rotate(360deg) scale(0.95);
+}
+
+.chat-fab--open:hover {
+  transform: rotate(360deg) scale(1.05);
 }
 
 .chat-fab-icon {
@@ -257,24 +263,25 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
 /* Slide animation */
 .chat-slide-enter-active,
 .chat-slide-leave-active {
-  transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15);
-  transform-origin: calc(100% - 20px) calc(100% + 40px);
+  transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: bottom right;
 }
 .chat-slide-enter-from,
 .chat-slide-leave-to {
   opacity: 0;
-  transform: scale(0.6) translateY(20px);
+  transform: translateY(20px) scale(0.3);
+  pointer-events: none;
 }
 
 /* Icon Fade Animation */
 .icon-fade-enter-active,
 .icon-fade-leave-active {
-  transition: opacity 0.2s, transform 0.2s;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .icon-fade-enter-from,
 .icon-fade-leave-to {
   opacity: 0;
-  transform: rotate(-60deg) scale(0.4);
+  transform: rotate(-90deg) scale(0.2);
 }
 
 /* ── Header ──────────────────────────────────────────────── */
