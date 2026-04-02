@@ -49,7 +49,7 @@
           <thead>
             <tr class="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
               <th class="px-4 py-3 text-left"><p class="font-medium text-gray-500 text-xs dark:text-gray-400 uppercase tracking-wider">Cliente / Contacto</p></th>
-              <th class="px-4 py-3 text-left"><p class="font-medium text-gray-500 text-xs dark:text-gray-400 uppercase tracking-wider">Fecha</p></th>
+              <th class="px-4 py-3 text-left"><p class="font-medium text-gray-500 text-xs dark:text-gray-400 uppercase tracking-wider">Fecha y Horario</p></th>
               <th class="px-4 py-3 text-left"><p class="font-medium text-gray-500 text-xs dark:text-gray-400 uppercase tracking-wider">Atención Previa</p></th>
               <th class="px-4 py-3 text-left"><p class="font-medium text-gray-500 text-xs dark:text-gray-400 uppercase tracking-wider">Físico (Peso / Estatura)</p></th>
               <th class="px-4 py-3 text-center"><p class="font-medium text-gray-500 text-xs dark:text-gray-400 uppercase tracking-wider">Acciones</p></th>
@@ -66,6 +66,7 @@
               <td class="px-4 py-3">
                 <div class="inline-flex flex-col">
                   <span class="font-medium text-gray-800 text-sm dark:text-white/90">{{ formatDate(c.fecha) }}</span>
+                  <span class="text-xs text-brand-600 dark:text-brand-400 mt-0.5" v-if="c.horario">🕒 {{ c.horario }} hrs</span>
                 </div>
               </td>
               <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
@@ -130,20 +131,29 @@
                   class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-gray-500 outline-none cursor-not-allowed dark:border-gray-700 dark:bg-gray-700 dark:text-gray-400" />
               </div>
 
-              <!-- Fecha y Atención -->
-              <div>
-                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Fecha Deseada</label>
-                <input v-model="form.fecha" type="date" required
-                  class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-800 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90 [color-scheme:light] dark:[color-scheme:dark]" />
-              </div>
-              
-              <div>
-                <label class="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">¿Atención Previa?</label>
-                <select v-model="form.atencion_previa" disabled
-                  class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-gray-500 outline-none cursor-not-allowed dark:border-gray-700 dark:bg-gray-700 dark:text-gray-400">
-                  <option value="si">Sí</option>
-                  <option value="no">No</option>
-                </select>
+              <!-- Fecha, Horario y Atención -->
+              <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div>
+                  <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Fecha Deseada</label>
+                  <input v-model="form.fecha" type="date" required
+                    class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-800 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90 [color-scheme:light] dark:[color-scheme:dark]" />
+                </div>
+                <div>
+                  <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Horario</label>
+                  <select v-model="form.horario" required
+                    class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-gray-800 outline-none focus:border-brand-500 dark:border-gray-700 dark:text-white/90">
+                    <option value="" disabled>Seleccione un horario</option>
+                    <option v-for="h in TODOS_LOS_HORARIOS" :key="h" :value="h">{{ h }}</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">¿Atención Previa?</label>
+                  <select v-model="form.atencion_previa" disabled
+                    class="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-gray-500 outline-none cursor-not-allowed dark:border-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                    <option value="si">Sí</option>
+                    <option value="no">No</option>
+                  </select>
+                </div>
               </div>
 
               <!-- Datos Físicos -->
@@ -187,6 +197,13 @@ import AdminLayout from '@/components/layout/AdminLayout.vue'
 import Modal from '@/components/ui/Modal.vue'
 import { citasApi } from '@/api/index.js'
 
+const TODOS_LOS_HORARIOS = [
+  '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
+  '11:00', '11:30', '12:00', '12:30', '13:00', '13:30',
+  '14:00', '14:30', '15:00', '15:30', '16:00', '16:30',
+  '17:00', '17:30'
+]
+
 // ── Estado ────────────────────────────────────────────────────────────────────
 const citas = ref<any[]>([])
 const loading = ref(false)
@@ -209,6 +226,7 @@ const initForm = () => ({
   cliente_nombre: '',
   cliente_telefono: '',
   fecha: '',
+  horario: '',
   atencion_previa: 'no',
   peso: '',
   estatura: ''
@@ -275,6 +293,7 @@ function abrirEditar(c: any) {
     cliente_nombre: c.cliente_nombre,
     cliente_telefono: c.cliente_telefono,
     fecha: fechaFormateada,
+    horario: c.horario || '',
     atencion_previa: c.atencion_previa,
     peso: c.peso === null ? '' : c.peso,
     estatura: c.estatura === null ? '' : c.estatura
