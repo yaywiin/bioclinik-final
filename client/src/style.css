@@ -1,10 +1,10 @@
 :root {
   /* Brand Colors */
-  --color-primary: #1962C8;
-  --color-primary-dark: #124da0;
-  --color-primary-light: #448cf1;
-  --color-secondary: #041B47;
-  --color-bg: #F4F8FD;
+  --color-primary: #33AAAE;
+  --color-primary-dark: #267f83;
+  --color-primary-light: #5ec8cc;
+  --color-secondary: #0d3a3c;
+  --color-bg: #f2fbfb;
   --color-white: #ffffff;
   
   /* Text Colors */
@@ -21,9 +21,9 @@
   --radius-md: 1rem;
   
   /* Shadows */
-  --shadow-sm: 0 4px 6px rgba(4, 27, 71, 0.05);
-  --shadow-md: 0 10px 25px rgba(4, 27, 71, 0.1);
-  --shadow-lg: 0 20px 40px rgba(25, 98, 200, 0.15);
+  --shadow-sm: 0 4px 6px rgba(13, 58, 60, 0.06);
+  --shadow-md: 0 10px 25px rgba(13, 58, 60, 0.12);
+  --shadow-lg: 0 20px 40px rgba(51, 170, 174, 0.18);
 }
 
 * {

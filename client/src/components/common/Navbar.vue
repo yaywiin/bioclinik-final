@@ -2,10 +2,9 @@
   <nav class="navbar" :class="{ 'navbar-scrolled': isScrolled }">
     <div class="container navbar-container">
       
-      <!-- Logo -->
+      <!-- Brand -->
       <RouterLink to="/" class="navbar-brand">
-        <img src="/logo.png" alt="Bioclinik Logo" class="navbar-logo desktop-logo" />
-        <img src="/logo-mobile.png" alt="Bioclinik Logo" class="navbar-logo mobile-logo" />
+        <span class="brand-text">Bioclinik</span>
       </RouterLink>
 
       <!-- Desktop Menu -->
@@ -120,16 +119,20 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   z-index: 1001;
+  text-decoration: none;
 }
 
-.navbar-logo {
-  height: 54px;
-  width: auto;
-  object-fit: contain;
+.brand-text {
+  font-family: var(--font-main);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: -0.02em;
+  transition: color 0.2s ease;
 }
 
-.mobile-logo {
-  display: none;
+.navbar-brand:hover .brand-text {
+  color: var(--color-primary-dark);
 }
 
 .nav-links {
@@ -302,11 +305,8 @@ onUnmounted(() => {
   .hamburger-btn {
     display: flex;
   }
-  .desktop-logo {
-    display: none;
-  }
-  .mobile-logo {
-    display: block;
+  .brand-text {
+    font-size: 1.4rem;
   }
 }
 </style>

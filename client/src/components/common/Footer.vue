@@ -13,7 +13,7 @@
         <div class="footer-grid">
           <!-- Brand Column -->
           <div class="footer-brand fade-in-up">
-            <img src="/logo.png" alt="Bioclinik Logo" class="footer-logo" />
+            <span class="footer-brand-text">Bioclinik</span>
             <p class="brand-desc mt-4">Clínica Nutricional y del Metabolismo centrada en tu bienestar integral con enfoques científicos y personalizados.</p>
             
             <div class="social-links mt-4">
@@ -102,7 +102,7 @@ const appStore = useAppStore()
 }
 
 .footer {
-  background: linear-gradient(135deg, var(--color-secondary) 0%, #1a3a41 100%);
+  background: linear-gradient(135deg, var(--color-secondary) 0%, #0a2628 100%);
   color: var(--color-white);
   padding: 3rem 0 1.5rem 0;
   position: relative;
@@ -116,16 +116,13 @@ const appStore = useAppStore()
   margin-bottom: 3rem;
 }
 
-.footer-logo {
-  height: 48px;
-  width: auto;
-  object-fit: contain;
-  filter: brightness(0) invert(1);
-  transition: transform 0.3s ease;
-}
-
-.footer-logo:hover {
-  transform: scale(1.05);
+.footer-brand-text {
+  font-family: var(--font-main);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-white);
+  letter-spacing: -0.02em;
+  display: inline-block;
 }
 
 .brand-desc {
