@@ -26,7 +26,7 @@
         <!-- Header -->
         <div class="chat-header">
           <div class="chat-header-avatar">
-            <img src="/logo.png" alt="Bioclinik" />
+            <span class="chat-header-initial">B</span>
           </div>
           <div class="chat-header-info">
             <h3>Bioclinik</h3>
@@ -200,25 +200,25 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1962C8, #124da0);
+  background: linear-gradient(135deg, #33AAAE, #267f83);
   color: #fff;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 25px rgba(25, 98, 200, 0.45);
+  box-shadow: 0 8px 25px rgba(51, 170, 174, 0.45);
   transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease, box-shadow 0.3s ease;
   transform-origin: center;
 }
 
 .chat-fab:hover {
   transform: scale(1.1) translateY(-4px);
-  box-shadow: 0 12px 35px rgba(25, 98, 200, 0.55);
+  box-shadow: 0 12px 35px rgba(51, 170, 174, 0.55);
 }
 
 .chat-fab--open {
-  background: linear-gradient(135deg, #041B47, #1962C8);
+  background: linear-gradient(135deg, #0d3a3c, #33AAAE);
   transform: rotate(360deg) scale(0.95);
 }
 
@@ -254,7 +254,7 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
   max-height: 540px;
   background: #fff;
   border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(4, 27, 71, 0.18);
+  box-shadow: 0 20px 60px rgba(13, 58, 60, 0.18);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -290,7 +290,7 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, #1962C8, #041B47);
+  background: linear-gradient(135deg, #33AAAE, #0d3a3c);
   color: white;
 }
 
@@ -298,7 +298,7 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: white;
+  background: rgba(255,255,255,0.2);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -306,11 +306,12 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
   flex-shrink: 0;
 }
 
-.chat-header-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 4px;
+.chat-header-initial {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
 }
 
 .chat-header-info {
@@ -349,7 +350,7 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
   flex: 1;
   overflow-y: auto;
   padding: 1rem;
-  background: #f4f8fd;
+  background: #f2fbfb;
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
@@ -358,7 +359,7 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
 
 .chat-messages::-webkit-scrollbar { width: 4px; }
 .chat-messages::-webkit-scrollbar-track { background: transparent; }
-.chat-messages::-webkit-scrollbar-thumb { background: #c7d9f5; border-radius: 4px; }
+.chat-messages::-webkit-scrollbar-thumb { background: #a8d8da; border-radius: 4px; }
 
 .chat-message {
   display: flex;
@@ -373,7 +374,7 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1962C8, #041B47);
+  background: linear-gradient(135deg, #33AAAE, #0d3a3c);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -399,11 +400,11 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
   background: white;
   color: #1a202c;
   border-bottom-left-radius: 4px;
-  box-shadow: 0 2px 8px rgba(4, 27, 71, 0.08);
+  box-shadow: 0 2px 8px rgba(13, 58, 60, 0.08);
 }
 
 .chat-message--user .chat-bubble {
-  background: linear-gradient(135deg, #1962C8, #124da0);
+  background: linear-gradient(135deg, #33AAAE, #267f83);
   color: white;
   border-bottom-right-radius: 4px;
 }
@@ -428,13 +429,13 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
   padding: 0.75rem 1rem;
   background: white;
   border-bottom-left-radius: 4px;
-  box-shadow: 0 2px 8px rgba(4, 27, 71, 0.08);
+  box-shadow: 0 2px 8px rgba(13, 58, 60, 0.08);
 }
 
 .chat-bubble--typing span {
   width: 7px;
   height: 7px;
-  background: #1962C8;
+  background: #33AAAE;
   border-radius: 50%;
   animation: typing-dot 1.2s infinite;
   opacity: 0.5;
@@ -454,14 +455,14 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
   flex-wrap: wrap;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  background: #f4f8fd;
-  border-top: 1px solid #e8f0fb;
+  background: #f2fbfb;
+  border-top: 1px solid #b2e0e2;
 }
 
 .chat-option-btn {
   background: white;
-  color: #1962C8;
-  border: 1.5px solid #1962C8;
+  color: #33AAAE;
+  border: 1.5px solid #33AAAE;
   border-radius: 999px;
   padding: 0.4rem 0.875rem;
   font-size: 0.8rem;
@@ -473,10 +474,10 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
 }
 
 .chat-option-btn:hover {
-  background: #1962C8;
+  background: #33AAAE;
   color: white;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(25, 98, 200, 0.3);
+  box-shadow: 0 4px 12px rgba(51, 170, 174, 0.3);
 }
 
 /* ── Input Area ───────────────────────────────────────────── */
@@ -486,24 +487,24 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
   gap: 0.5rem;
   padding: 0.75rem 1rem;
   background: white;
-  border-top: 1px solid #e8f0fb;
+  border-top: 1px solid #b2e0e2;
 }
 
 .chat-input-area input {
   flex: 1;
-  border: 1.5px solid #c7d9f5;
+  border: 1.5px solid #a8d8da;
   border-radius: 999px;
   padding: 0.5rem 1rem;
   font-family: 'Nunito', sans-serif;
   font-size: 0.875rem;
   color: #1a202c;
-  background: #f4f8fd;
+  background: #f2fbfb;
   outline: none;
   transition: border-color 0.2s;
 }
 
 .chat-input-area input:focus {
-  border-color: #1962C8;
+  border-color: #33AAAE;
   background: white;
 }
 
@@ -511,7 +512,7 @@ const sessionId = ref(`session-${Date.now()}-${Math.random().toString(36).slice(
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1962C8, #124da0);
+  background: linear-gradient(135deg, #33AAAE, #267f83);
   color: white;
   border: none;
   cursor: pointer;
