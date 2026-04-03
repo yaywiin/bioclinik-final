@@ -699,6 +699,12 @@ legend {
 }
 
 .field-error {
+  font-size: 0.78rem;
+  color: #e53e3e;
+  font-weight: 600;
+}
+
+/* ── Atención Previa (Radios) ────────────────────────── */
 .atencion-group { margin-bottom: 1.25rem; }
 .atencion-group > label { margin-bottom: 0.75rem; }
 
