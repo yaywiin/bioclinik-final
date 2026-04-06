@@ -39,7 +39,34 @@
                 <label>Fecha Deseada</label>
                 <div class="input-with-icon">
                   <CalendarDays :size="18" class="input-icon" />
-                  <input type="date" v-model="formData.fecha" required />
+                  <input type="date" v-model="formData.fecha" :min="fechaMinima" required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>
+                  Horario Deseado
+                  <span v-if="cargandoHorarios" class="loading-mini ml-2">Consultando...</span>
+                </label>
+                <div class="input-with-icon">
+                  <Clock :size="18" class="input-icon" />
+                  <select 
+                    v-model="formData.horario" 
+                    :disabled="!formData.fecha || cargandoHorarios"
+                    required
+                  >
+                    <option value="" disabled>
+                      {{ !formData.fecha ? 'Selecciona una fecha primero' : (cargandoHorarios ? 'Cargando...' : 'Elige un horario') }}
+                    </option>
+                    <option 
+                      v-for="h in TODOS_LOS_HORARIOS" 
+                      :key="h" 
+                      :value="h"
+                      :disabled="horariosOcupados.includes(h)"
+                    >
+                      {{ h }} hrs {{ horariosOcupados.includes(h) ? '(Ocupado)' : '' }}
+                    </option>
+                  </select>
                 </div>
               </div>
               
@@ -95,22 +122,39 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useAppStore } from '../../stores/app'
-import { X, User, Phone, CalendarDays, ArrowRight, CheckCircle } from 'lucide-vue-next'
+import { X, User, Phone, CalendarDays, Clock, ArrowRight, CheckCircle } from 'lucide-vue-next'
 import api from '../../services/api'
 
 const appStore = useAppStore()
 
 const step = ref(1)
 
+const TODOS_LOS_HORARIOS = [
+  '08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
+  '11:00', '11:30', '12:00', '12:30', '13:00', '13:30',
+  '14:00', '14:30', '15:00', '15:30', '16:00', '16:30',
+  '17:00', '17:30'
+]
+
 const formData = ref({
   nombre: '',
   telefono: '',
   fecha: '',
+  horario: '',
   atencionPrevia: 'no',
   peso: '',
   estatura: ''
+})
+
+const horariosOcupados = ref([])
+const cargandoHorarios = ref(false)
+
+const fechaMinima = computed(() => {
+  const hoy = new Date()
+  hoy.setDate(hoy.getDate() + 1)
+  return hoy.toISOString().split('T')[0]
 })
 
 const closeModal = () => {
@@ -120,7 +164,7 @@ const closeModal = () => {
 }
 
 const canProceedStep1 = computed(() => {
-  return formData.value.nombre && formData.value.telefono && formData.value.fecha
+  return formData.value.nombre && formData.value.telefono && formData.value.fecha && formData.value.horario
 })
 
 const nextStep = () => {
@@ -128,6 +172,23 @@ const nextStep = () => {
     step.value = 2
   }
 }
+
+// Watch fecha to fetch occupied hours
+watch(() => formData.value.fecha, async (newFecha) => {
+  formData.value.horario = '' // Reset selection
+  if (!newFecha) return
+
+  cargandoHorarios.value = true
+  try {
+    const res = await api.get(`/citas/horarios-ocupados?fecha=${newFecha}`)
+    // axios interceptor returns data directly
+    horariosOcupados.value = res.ocupados || []
+  } catch (error) {
+    console.error('Error al consultar horarios:', error)
+  } finally {
+    cargandoHorarios.value = false
+  }
+})
 
 const isSubmitting = ref(false)
 
@@ -138,6 +199,7 @@ const submitForm = async () => {
       cliente_nombre: formData.value.nombre,
       cliente_telefono: formData.value.telefono,
       fecha: formData.value.fecha,
+      horario: formData.value.horario,
       atencion_previa: formData.value.atencionPrevia,
       peso: formData.value.peso || null,
       estatura: formData.value.estatura || null
@@ -153,13 +215,15 @@ const submitForm = async () => {
       nombre: '',
       telefono: '',
       fecha: '',
+      horario: '',
       atencionPrevia: 'no',
       peso: '',
       estatura: ''
     }
   } catch (error) {
     console.error('Error al solicitar cita:', error)
-    alert('Oops! Hubo un problema al solicitar la cita. Inténtalo de nuevo.')
+    const msg = error.response?.data?.error || 'Oops! Hubo un problema al solicitar la cita. Inténtalo de nuevo.'
+    alert(msg)
   } finally {
     isSubmitting.value = false
   }
@@ -272,7 +336,8 @@ form {
 input[type="text"],
 input[type="tel"],
 input[type="number"],
-input[type="date"] {
+input[type="date"],
+select {
   width: 100%;
   padding: 0.8rem 1rem;
   border: 1px solid #ddd;
@@ -280,13 +345,15 @@ input[type="date"] {
   font-size: 1rem;
   color: var(--color-text);
   transition: border-color 0.3s, box-shadow 0.3s;
+  background-color: white;
 }
 
 .input-with-icon {
   position: relative;
 }
 
-.input-with-icon input {
+.input-with-icon input,
+.input-with-icon select {
   padding-left: 2.8rem;
 }
 
@@ -296,12 +363,29 @@ input[type="date"] {
   left: 1rem;
   transform: translateY(-50%);
   color: #999;
+  pointer-events: none;
+  z-index: 2;
 }
 
-input:focus {
+input:focus,
+select:focus {
   outline: none;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(117, 203, 190, 0.2);
+}
+
+.loading-mini {
+  font-size: 0.75rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  animation: pulse 1.5s infinite;
+}
+
+.ml-2 { margin-left: 0.5rem; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .radio-group {
